@@ -5,6 +5,7 @@ import com.practice.HospitalMangement.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -12,8 +13,13 @@ import java.util.List;
 public class PatientService {
     public final PatientRepository patientRepository;
 
-    public List<Patient> getPatients() {
-        return patientRepository.findAll();
+    public List<Patient> getPatients(String name, String email) {
+        if (name == null && email == null)
+            return patientRepository.findAll();
+        else if (email != null)
+            return patientRepository.findByEmail(email);
+        else
+            return patientRepository.findByName(name);
     }
 
     public void addPatient(Patient patient) {
@@ -24,15 +30,13 @@ public class PatientService {
         return patientRepository.findById(id).orElseThrow();
     }
 
-    public List<Patient> getPatientByName(String name) {
-        return patientRepository.findByName(name);
-    }
 
     public List<Patient> getPatientByNameContain(String name) {
         return patientRepository.findByNameContaining(name);
     }
 
-    public Patient getPatientByEmail(String email) {
-        return  patientRepository.findByEmail(email);
+
+    public List<Patient> getPatientByBornBefore(LocalDate birthDate) {
+        return patientRepository.findByBornBefore(birthDate);
     }
 }

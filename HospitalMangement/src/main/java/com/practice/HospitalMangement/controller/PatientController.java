@@ -3,8 +3,10 @@ package com.practice.HospitalMangement.controller;
 import com.practice.HospitalMangement.entity.Patient;
 import com.practice.HospitalMangement.service.PatientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -14,8 +16,11 @@ public class PatientController {
     private final PatientService patientService;
 
     @GetMapping("/patients")
-    public List<Patient> getPatient() {
-        return patientService.getPatients();
+    public List<Patient> getPatient(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email
+    ) {
+        return patientService.getPatients( name, email);
     }
 
     @GetMapping("/patients/{id}")
@@ -23,19 +28,15 @@ public class PatientController {
         return patientService.getPatientById(id);
     }
 
-    @GetMapping("/patients/name/{name}")
-    public List<Patient> getPatientByName(@PathVariable String name) {
-        return patientService.getPatientByName(name);
-    }
-
     @GetMapping("/patients/keyword/{name}")
     public List<Patient> getPatientByNameContain(@PathVariable String name) {
         return patientService.getPatientByNameContain(name);
     }
 
-    @GetMapping("/patients/email/{email}")
-    public Patient getPatientByEmail(@PathVariable String email) {
-        return patientService.getPatientByEmail(email);
+
+    @GetMapping("/patients/search")
+    public List<Patient> getPatientByBornBefore(@RequestParam(name = "born-date-before", required = false) LocalDate birthDate) {
+        return patientService.getPatientByBornBefore(birthDate);
     }
 
     @PostMapping("/patients")
