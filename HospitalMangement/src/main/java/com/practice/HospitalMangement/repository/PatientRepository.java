@@ -1,6 +1,8 @@
 package com.practice.HospitalMangement.repository;
 
 import com.practice.HospitalMangement.entity.Patient;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,11 +13,11 @@ import java.util.List;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-    List<Patient> findByName(String name);
+    Page<Patient> findByName(Pageable pageable, String name);
 
-    List<Patient> findByNameContaining(String name);
+    Page<Patient> findByNameContaining(Pageable pageable, String name);
 
-    List<Patient> findByEmail(String email);
+    Page<Patient> findByEmail(Pageable pageable, String email);
 
     List<Patient> findByDateOfBirth(LocalDate birthDate);
 
@@ -24,4 +26,6 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     )
     List<Patient> findByBornBefore(@Param("dateOfBirth") LocalDate birthDate);
 
+    @Query(value = "select * from patient", nativeQuery = true)
+    Page<Patient> findAllPatients(Pageable pageable);
 }

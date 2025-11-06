@@ -3,6 +3,8 @@ package com.practice.HospitalMangement.service;
 import com.practice.HospitalMangement.entity.Patient;
 import com.practice.HospitalMangement.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,13 +15,13 @@ import java.util.List;
 public class PatientService {
     public final PatientRepository patientRepository;
 
-    public List<Patient> getPatients(String name, String email) {
+    public Page<Patient> getPatients(String name, String email) {
         if (name == null && email == null)
-            return patientRepository.findAll();
+            return patientRepository.findAllPatients(PageRequest.of(0, 2));
         else if (email != null)
-            return patientRepository.findByEmail(email);
+            return patientRepository.findByEmail(PageRequest.of(0, 2), email);
         else
-            return patientRepository.findByName(name);
+            return patientRepository.findByName(PageRequest.of(0, 2), name);
     }
 
     public void addPatient(Patient patient) {
@@ -31,9 +33,9 @@ public class PatientService {
     }
 
 
-    public List<Patient> getPatientByNameContain(String name) {
-        return patientRepository.findByNameContaining(name);
-    }
+//    public List<Patient> getPatientByNameContain(String name) {
+//        return patientRepository.findByNameContaining(PageRequest.of(0,2),name);
+//    }
 
 
     public List<Patient> getPatientByBornBefore(LocalDate birthDate) {

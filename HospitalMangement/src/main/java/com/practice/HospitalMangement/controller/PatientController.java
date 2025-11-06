@@ -3,7 +3,8 @@ package com.practice.HospitalMangement.controller;
 import com.practice.HospitalMangement.entity.Patient;
 import com.practice.HospitalMangement.service.PatientService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -16,10 +17,10 @@ public class PatientController {
     private final PatientService patientService;
 
     @GetMapping("/patients")
-    public List<Patient> getPatient(
+    public Page<Patient> getPatient(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email
-    ) {
+    ){
         return patientService.getPatients( name, email);
     }
 
@@ -28,10 +29,10 @@ public class PatientController {
         return patientService.getPatientById(id);
     }
 
-    @GetMapping("/patients/keyword/{name}")
-    public List<Patient> getPatientByNameContain(@PathVariable String name) {
-        return patientService.getPatientByNameContain(name);
-    }
+//    @GetMapping("/patients/keyword/{name}")
+//    public List<Patient> getPatientByNameContain(@PathVariable String name) {
+//        return patientService.getPatientByNameContain(name);
+//    }
 
 
     @GetMapping("/patients/search")
