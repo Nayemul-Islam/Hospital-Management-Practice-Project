@@ -27,5 +27,8 @@ public class Patient {
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
+    @OneToOne
+    private  Insurance insurance;
+
 
 }
