@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,18 +25,12 @@ public class PatientService {
         } else {
             patients = patientRepository.findByName(PageRequest.of(0, 2), name);
         }
-        return patients.map(patient ->
-                PatientDto.builder()
-                        .name(patient.getName())
-                        .email(patient.getEmail())
-                        .gender(patient.getGender())
-                        .dateOfBirth(patient.getDateOfBirth())
-                        .build()
-        );
+        return patients.map(patient -> PatientDto.builder().name(patient.getName()).email(patient.getEmail()).gender(patient.getGender()).dateOfBirth(patient.getDateOfBirth()).build());
     }
 
-    public void addPatient(Patient patient) {
-        patientRepository.save(patient);
+    public void addPatient(PatientDto patientDto) {
+
+        patientRepository.save(Patient.builder().name(patientDto.getName()).email(patientDto.getEmail()).gender(patientDto.getGender()).dateOfBirth(patientDto.getDateOfBirth()).build());
     }
 
     public Patient getPatientById(Long id) {
