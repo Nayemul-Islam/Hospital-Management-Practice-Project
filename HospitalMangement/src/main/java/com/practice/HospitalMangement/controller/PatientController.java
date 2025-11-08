@@ -1,5 +1,6 @@
 package com.practice.HospitalMangement.controller;
 
+import com.practice.HospitalMangement.dto.PatientDto;
 import com.practice.HospitalMangement.entity.Patient;
 import com.practice.HospitalMangement.service.PatientService;
 import lombok.RequiredArgsConstructor;
@@ -17,23 +18,17 @@ public class PatientController {
     private final PatientService patientService;
 
     @GetMapping("/patients")
-    public Page<Patient> getPatient(
+    public Page<PatientDto> getPatient(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email
-    ){
-        return patientService.getPatients( name, email);
+    ) {
+        return patientService.getPatients(name, email);
     }
 
     @GetMapping("/patients/{id}")
     public Patient getPatientByID(@PathVariable Long id) {
         return patientService.getPatientById(id);
     }
-
-//    @GetMapping("/patients/keyword/{name}")
-//    public List<Patient> getPatientByNameContain(@PathVariable String name) {
-//        return patientService.getPatientByNameContain(name);
-//    }
-
 
     @GetMapping("/patients/search")
     public List<Patient> getPatientByBornBefore(@RequestParam(name = "born-date-before", required = false) LocalDate birthDate) {

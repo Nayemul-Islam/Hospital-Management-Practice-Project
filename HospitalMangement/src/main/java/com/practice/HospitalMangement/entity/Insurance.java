@@ -27,7 +27,7 @@ public class Insurance {
     @Column(updatable = false)
     private LocalDateTime creationDate;
 
-    @OneToOne(mappedBy = "insurance")
+    @OneToOne(mappedBy = "insurance", fetch = FetchType.LAZY)
     private Patient patient;
 
 }

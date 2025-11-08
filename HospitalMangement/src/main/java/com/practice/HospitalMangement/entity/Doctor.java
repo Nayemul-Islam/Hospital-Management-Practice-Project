@@ -23,9 +23,9 @@ public class Doctor {
     @Column(nullable = false)
     private String specialization;
 
-    @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     private List<Appointment> appointment;
 
-    @ManyToMany(mappedBy = "doctors")
+    @ManyToMany(mappedBy = "doctors", fetch = FetchType.LAZY)
     private Set<Department> departments = new HashSet<>();
 }

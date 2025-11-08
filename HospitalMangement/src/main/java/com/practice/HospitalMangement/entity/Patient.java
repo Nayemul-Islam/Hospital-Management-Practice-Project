@@ -28,10 +28,10 @@ public class Patient {
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
-    @OneToOne
-    private  Insurance insurance;
+    @OneToOne(fetch = FetchType.LAZY)
+    private Insurance insurance;
 
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
     private List<Appointment> appointments;
 
 

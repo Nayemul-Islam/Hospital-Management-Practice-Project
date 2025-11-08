@@ -21,6 +21,6 @@ public class Department {
     @JoinColumn(nullable = false)
     private Doctor headDoctor;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Doctor> doctors = new HashSet<>();
 }
