@@ -1,6 +1,7 @@
 package com.practice.HospitalMangement.security;
 
 import com.practice.HospitalMangement.entity.User;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,9 +26,17 @@ public class AuthUtil {
                 .subject(user.getUsername())
                 .claim("userId", user.getId())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 20))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 2))
                 .signWith(getSecretKey())
                 .compact();
     }
 
+    public String getUsername(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(getSecretKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.getSubject();
+    }
 }

@@ -1,5 +1,6 @@
 package com.practice.HospitalMangement.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,20 +12,27 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.security.AuthProvider;
 
+
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests(auth ->
-                        auth.anyRequest().permitAll())
+        http.authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/users").authenticated()
+                        .anyRequest().permitAll())
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
+                .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
