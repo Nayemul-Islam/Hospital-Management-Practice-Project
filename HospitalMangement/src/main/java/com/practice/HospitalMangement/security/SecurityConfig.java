@@ -1,6 +1,7 @@
 package com.practice.HospitalMangement.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.security.AuthProvider;
 
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -32,7 +34,12 @@ public class SecurityConfig {
                         .anyRequest().permitAll())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oAuth2 -> {
+                    oAuth2.failureHandler((request, response, exception) -> {
+                        log.error("Authentication Failure", exception);
+                    });
+                });
         return http.build();
     }
 
